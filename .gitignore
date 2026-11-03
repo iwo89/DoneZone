@@ -1,0 +1,8 @@
+node_modules/
+dist/
+release/
+.dev-data/
+*.db
+AUDIT_REPORT.md
+
+.claude/settings.local.json

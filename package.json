@@ -1,0 +1,102 @@
+{
+  "name": "donezone",
+  "version": "1.6.0",
+  "description": "Electron + React + Vite + TypeScript + SQLite",
+  "author": "DoneZone",
+  "main": "dist/main/index.js",
+  "scripts": {
+    "dev": "tsc -p tsconfig.main.json && concurrently -k -n tsc,vite,electron \"tsc -p tsconfig.main.json --watch --preserveWatchOutput\" \"vite\" \"wait-on http://localhost:5173 && electron .\"",
+    "build:renderer": "vite build",
+    "build:main": "tsc -p tsconfig.main.json",
+    "compile": "npm run build:renderer && npm run build:main",
+    "build": "npm run compile && electron-builder --win",
+    "dist": "npm run compile && electron-builder",
+    "publish": "npm run compile && electron-builder --win --publish always",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.8",
+    "@types/node": "^20.14.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "concurrently": "^8.2.0",
+    "electron": "^31.0.0",
+    "electron-builder": "^24.13.0",
+    "terser": "^5.46.1",
+    "typescript": "^5.5.0",
+    "vite": "^5.3.0",
+    "wait-on": "^7.2.0"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.1.0",
+    "electron-store": "^8.2.0",
+    "electron-updater": "^6.8.3",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0"
+  },
+  "build": {
+    "appId": "com.donezone.app",
+    "productName": "DoneZone",
+    "copyright": "Copyright © 2025 DoneZone",
+    "directories": {
+      "output": "dist",
+      "buildResources": "assets"
+    },
+    "icon": "assets/icon.png",
+    "publish": {
+      "provider": "github",
+      "owner": "iwo89",
+      "repo": "DoneZone",
+      "private": false,
+      "releaseType": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "assets/**/*",
+      "package.json",
+      "!**/*.map",
+      "!dist/*.exe",
+      "!dist/*.exe.blockmap",
+      "!dist/*.blockmap",
+      "!dist/win-unpacked/**",
+      "!dist/portable/**",
+      "!dist/builder-debug.yml"
+    ],
+    "asarUnpack": [
+      "node_modules/better-sqlite3/**/*",
+      "node_modules/bindings/**/*",
+      "node_modules/file-uri-to-path/**/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "assets/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "DoneZone"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  }
+}
